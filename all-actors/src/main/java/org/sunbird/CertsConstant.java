@@ -180,6 +180,18 @@ public class CertsConstant {
         return getPropertyFromEnv(JsonKey.PRIVATE_CLOUD_STORAGE_KEY);
     }
 
+    public String getOciStorageSecret() {
+        return getPropertyFromEnv(JsonKey.PRIVATE_CLOUD_STORAGE_SECRET);
+    }
+
+    public String getOciStorageKey() {
+        return getPropertyFromEnv(JsonKey.PRIVATE_CLOUD_STORAGE_KEY);
+    }
+
+    public String getOciStorageEndpoint() {
+        return getPropertyFromEnv(JsonKey.CLOUD_STORAGE_ENDPOINT);
+    }
+
     public String getSignatoryExtensionUrl() {
         return String.format("%s/%s/%s", BASE_PATH, SIGNATORY_EXTENSION, "context.json");
     }
