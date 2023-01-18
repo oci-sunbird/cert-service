@@ -62,7 +62,9 @@ public class AzureStore extends CloudStore {
         if (StringUtils.isNotBlank(azureStoreConfig.getType())) {
             String storageKey = azureStoreConfig.getAzureStoreConfig().getAccount();
             String storageSecret = azureStoreConfig.getAzureStoreConfig().getKey();
-            StorageConfig storageConfig = new StorageConfig(azureStoreConfig.getType(), storageKey, storageSecret);
+            scala.Option<String> storageEndpoint = scala.Option.apply("");
+            scala.Option<String> storageRegion = scala.Option.apply("");
+            StorageConfig storageConfig = new StorageConfig(azureStoreConfig.getType(), storageKey, storageSecret,storageEndpoint,storageRegion);
             logger.info("StorageParams:init:all storage params initialized for azure block");
             storageService = StorageServiceFactory.getStorageService(storageConfig);
             cloudStorage = new CloudStorage(storageService);

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-public class AwsStoreConfig  {
+public class OciStoreConfig {
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -16,7 +16,9 @@ public class AwsStoreConfig  {
 
     private String key;
 
-    public AwsStoreConfig() {
+    private String endpoint;
+
+    public OciStoreConfig() {
     }
 
     public String getContainerName() {
@@ -49,6 +51,14 @@ public class AwsStoreConfig  {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
 

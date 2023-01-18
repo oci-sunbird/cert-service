@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sunbird.incredible.CertificateGenerator;
 import org.sunbird.incredible.UrlManager;
 import org.sunbird.incredible.processor.CertModel;
@@ -103,7 +104,28 @@ public class CertificateGeneratorActor extends BaseActor {
 
 
     private BaseStorageService getStorageService() {
-        StorageConfig storageConfig = new StorageConfig(certVar.getCloudStorageType(), certVar.getAzureStorageKey(), certVar.getAzureStorageSecret());
+        StorageConfig storageConfig;
+        String storageKey;
+        String storageSecret;
+        scala.Option<String> storageEndpoint;
+        scala.Option<String> storageRegion;
+        if (StringUtils.equalsIgnoreCase(certVar.getCloudStorageType(), "azure")) {
+            storageKey = certVar.getAzureStorageKey();
+            storageSecret = certVar.getAzureStorageSecret();
+            storageEndpoint = scala.Option.apply("");
+            storageRegion = scala.Option.apply("");
+        } else if (StringUtils.equalsIgnoreCase(certVar.getCloudStorageType(), "oci")){
+            storageKey = certVar.getOciStorageKey();
+            storageSecret = certVar.getOciStorageSecret();
+            storageEndpoint = scala.Option.apply(certVar.getOciStorageEndpoint());
+            storageRegion = scala.Option.apply("");
+        } else {
+            storageKey = "";
+            storageSecret = "";
+            storageEndpoint = scala.Option.apply("");
+            storageRegion = scala.Option.apply("");
+        }
+        storageConfig = new StorageConfig(certVar.getCloudStorageType(), storageKey, storageSecret,storageEndpoint,storageRegion);
         logger.info(null, "CertificateGeneratorActor:getStorageService:storage object formed: {}" ,storageConfig.toString());
         return StorageServiceFactory.getStorageService(storageConfig);
     }

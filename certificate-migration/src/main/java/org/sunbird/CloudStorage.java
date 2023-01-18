@@ -28,11 +28,21 @@ public class CloudStorage {
         if (StringUtils.equalsIgnoreCase(cloudStoreType, "azure")) {
             String storageKey = System.getenv("AZURE_STORAGE_KEY");
             String storageSecret = System.getenv("AZURE_STORAGE_SECRET");
-            storageService = StorageServiceFactory.getStorageService(new StorageConfig(cloudStoreType, storageKey, storageSecret));
+            scala.Option<String> storageEndpoint = scala.Option.apply(""));
+            scala.Option<String> storageRegion = scala.Option.apply("");
+            storageService = StorageServiceFactory.getStorageService(new StorageConfig(cloudStoreType, storageKey, storageSecret,storageEndpoint,storageRegion));
         } else if (StringUtils.equalsIgnoreCase(cloudStoreType, "aws")) {
             String storageKey = System.getenv("cert_aws_storage_key");
             String storageSecret = System.getenv("cert_aws_storage_secret");
-            storageService = StorageServiceFactory.getStorageService(new StorageConfig(cloudStoreType, storageKey, storageSecret));
+            scala.Option<String> storageEndpoint = scala.Option.apply(""));
+            scala.Option<String> storageRegion = scala.Option.apply("");
+            storageService = StorageServiceFactory.getStorageService(new StorageConfig(cloudStoreType, storageKey, storageSecret,storageEndpoint,storageRegion));
+        }else if (StringUtils.equalsIgnoreCase(cloudStoreType, "oci")) {
+            String storageKey = System.getenv("cert_oci_storage_key");
+            String storageSecret = System.getenv("cert_oci_storage_secret");
+            scala.Option<String> storageEndpoint = scala.Option.apply(System.getenv("cert_oci_storage_endpoint"));
+            scala.Option<String> storageRegion = scala.Option.apply("");
+            storageService = StorageServiceFactory.getStorageService(new StorageConfig(cloudStoreType, storageKey, storageSecret,storageEndpoint,storageRegion));
         } else try {
             throw new Exception("ERR_INVALID_CLOUD_STORAGE Error while initialising cloud storage");
         } catch (Exception e) {

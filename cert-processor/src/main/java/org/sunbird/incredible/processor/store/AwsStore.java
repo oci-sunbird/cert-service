@@ -62,7 +62,9 @@ public class AwsStore extends CloudStore {
         if (StringUtils.isNotBlank(awsStoreConfig.getType())) {
             String storageKey = awsStoreConfig.getAwsStoreConfig().getAccount();
             String storageSecret = awsStoreConfig.getAwsStoreConfig().getKey();
-            StorageConfig storageConfig = new StorageConfig(awsStoreConfig.getType(), storageKey, storageSecret);
+            scala.Option<String> storageEndpoint = scala.Option.apply("");
+            scala.Option<String> storageRegion = scala.Option.apply("");
+            StorageConfig storageConfig = new StorageConfig(awsStoreConfig.getType(), storageKey, storageSecret,storageEndpoint,storageRegion);
             logger.info("StorageParams:init:all storage params initialized for aws block");
             storageService = StorageServiceFactory.getStorageService(storageConfig);
             cloudStorage = new CloudStorage(storageService);

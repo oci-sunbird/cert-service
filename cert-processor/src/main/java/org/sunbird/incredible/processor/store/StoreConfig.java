@@ -18,6 +18,8 @@ public class StoreConfig {
 
     private AwsStoreConfig awsStoreConfig;
 
+    private OciStoreConfig ociStoreConfig;
+
     private GcpStoreConfig gcpStoreConfig;
 
     private StoreConfig() {
@@ -34,11 +36,14 @@ public class StoreConfig {
         } else if (storeParams.containsKey(JsonKey.GCP)) {
             GcpStoreConfig gcpStoreConfig = mapper.convertValue(storeParams.get(JsonKey.GCP), GcpStoreConfig.class);
             setGcpStoreConfig(gcpStoreConfig);
+        } else if (storeParams.containsKey(JsonKey.OCI)) {
+            OciStoreConfig ociStoreConfig = mapper.convertValue(storeParams.get(JsonKey.OCI), OciStoreConfig.class);
+            setOciStoreConfig(ociStoreConfig);
         }
     }
 
     public boolean isCloudStore() {
-        return (azureStoreConfig != null || awsStoreConfig != null || gcpStoreConfig != null);
+        return (azureStoreConfig != null || awsStoreConfig != null || gcpStoreConfig != null || ociStoreConfig != null);
     }
 
     public String getContainerName() {
@@ -49,6 +54,8 @@ public class StoreConfig {
             containerName = awsStoreConfig.getContainerName();
         } else if (JsonKey.GCP.equals(getType())) {
             containerName = gcpStoreConfig.getContainerName();
+        } else if (JsonKey.OCI.equals(getType())) {
+            containerName = ociStoreConfig.getContainerName();
         }
         return containerName;
     }
@@ -85,6 +92,13 @@ public class StoreConfig {
         this.awsStoreConfig = awsStoreConfig;
     }
 
+    public OciStoreConfig getOciStoreConfig() {
+        return ociStoreConfig;
+    }
+
+    public void setOciStoreConfig(OciStoreConfig ociStoreConfig) {
+        this.ociStoreConfig = ociStoreConfig;
+    }
     public GcpStoreConfig getGcpStoreConfig() {
         return gcpStoreConfig;
     }
