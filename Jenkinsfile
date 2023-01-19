@@ -14,22 +14,25 @@ node('build-slave') {
                     error 'Please resolve the errors and rerun..'
                 } else
                     println(ANSI_BOLD + ANSI_GREEN + "Found environment variable named hub_org with value as: " + hub_org + ANSI_NORMAL)
-            }
+                }
             cleanWs()
             if (params.github_release_tag == "") {
+		println(ANSI_BOLD + "no release tag / branch, checking out lastest commit" + ANSI_NORMAL)    
                 checkout scm
                 commit_hash = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                 branch_name = sh(script: 'git name-rev --name-only HEAD | rev | cut -d "/" -f1| rev', returnStdout: true).trim()
                 build_tag = branch_name + "_" + commit_hash
                 println(ANSI_BOLD + ANSI_YELLOW + "github_release_tag not specified, using the latest commit hash: " + commit_hash + ANSI_NORMAL)
             } else {
+		println(ANSI_BOLD + "found release tag / branch, checking out: " params.github_release_tag + ANSI_NORMAL)    
                 def scmVars = checkout scm
                 checkout scm: [$class: 'GitSCM', branches: [[name: "refs/tags/$params.github_release_tag"]], userRemoteConfigs: [[url: scmVars.GIT_URL]]]
                 build_tag = params.github_release_tag
                 println(ANSI_BOLD + ANSI_YELLOW + "github_release_tag specified, building from tag: " + params.github_release_tag + ANSI_NORMAL)
             }
             echo "build_tag: " + build_tag
-
+	    println(ANSI_BOLD + "checking folder contains with ls" + ANSI_NORMAL)	  
+            sh("ls")
             stage('Build') {
 		        currentDir = sh(returnStdout: true, script: 'pwd').trim()
                 env.NODE_ENV = "build"
