@@ -108,11 +108,6 @@
             <name>iText Repository - releases</name>
             <url>https://repo.itextsupport.com/releases</url>
         </repository>
-        <!-- This might cause problem -->
-        <repository>
-            <id>cloud-store</id>
-            <url>https://oss.sonatype.org/content/repositories/orgsunbird-1144</url>
-        </repository>
     </repositories>
     <build>
         <plugins>
