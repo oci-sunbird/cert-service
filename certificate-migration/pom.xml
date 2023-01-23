@@ -78,8 +78,8 @@
         </dependency>
         <dependency>
             <groupId>org.sunbird</groupId>
-            <artifactId>cloud-store-sdk</artifactId>
-            <version>1.4.0</version>
+            <artifactId>cloud-store-sdk_2.11</artifactId>
+            <version>1.4.6</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
