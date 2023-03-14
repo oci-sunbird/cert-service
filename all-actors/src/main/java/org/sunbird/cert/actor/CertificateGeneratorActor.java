@@ -77,8 +77,8 @@ public class CertificateGeneratorActor extends BaseActor {
             storageService = getStorageService();
             String uri = UrlManager.getContainerRelativePath((String) request.getRequest().get(JsonKey.PDF_URL));
             logger.info(request.getRequestContext(), "generateSignUrl:generate sign url method called for uri: {}", uri);
-            String signUrl = storageService.getSignedURL(certVar.getCONTAINER_NAME(), uri, Some.apply(getTimeoutInSeconds()),
-                    Some.apply("r"));
+            String signUrl = storageService.getSignedURLV2(certVar.getCONTAINER_NAME(), uri, Some.apply(getTimeoutInSeconds()),
+                        Some.apply("r"),Some.apply("application/pdf"));
             logger.info(request.getRequestContext(), "generateSignUrl:signedUrl got: {}",signUrl);
             Response response = new Response();
             response.put(JsonKey.RESPONSE, JsonKey.SUCCESS);
@@ -104,28 +104,7 @@ public class CertificateGeneratorActor extends BaseActor {
 
 
     private BaseStorageService getStorageService() {
-        StorageConfig storageConfig;
-        String storageKey;
-        String storageSecret;
-        scala.Option<String> storageEndpoint;
-        scala.Option<String> storageRegion;
-        if (StringUtils.equalsIgnoreCase(certVar.getCloudStorageType(), "azure")) {
-            storageKey = certVar.getAzureStorageKey();
-            storageSecret = certVar.getAzureStorageSecret();
-            storageEndpoint = scala.Option.apply("");
-            storageRegion = scala.Option.apply("");
-        } else if (StringUtils.equalsIgnoreCase(certVar.getCloudStorageType(), "oci")){
-            storageKey = certVar.getOciStorageKey();
-            storageSecret = certVar.getOciStorageSecret();
-            storageEndpoint = scala.Option.apply(certVar.getOciStorageEndpoint());
-            storageRegion = scala.Option.apply("");
-        } else {
-            storageKey = "";
-            storageSecret = "";
-            storageEndpoint = scala.Option.apply("");
-            storageRegion = scala.Option.apply("");
-        }
-        storageConfig = new StorageConfig(certVar.getCloudStorageType(), storageKey, storageSecret,storageEndpoint,storageRegion);
+        StorageConfig storageConfig = new StorageConfig(certVar.getCloudStorageType(), certVar.getCloudStorageKey(), certVar.getCloudStorageSecret());
         logger.info(null, "CertificateGeneratorActor:getStorageService:storage object formed: {}" ,storageConfig.toString());
         return StorageServiceFactory.getStorageService(storageConfig);
     }
@@ -253,14 +232,7 @@ public class CertificateGeneratorActor extends BaseActor {
     }
 
     private String getContainerName (StoreConfig storeParams) {
-        String type = storeParams.getType();
-        if (JsonKey.AZURE.equalsIgnoreCase(type)) {
-            return storeParams.getAzureStoreConfig().getContainerName();
-        } else if (JsonKey.AWS.equalsIgnoreCase(type)) {
-            return storeParams.getAwsStoreConfig().getContainerName();
-        } else {
-            return storeParams.getGcpStoreConfig().getContainerName();
-        }
+        return storeParams.getContainerName();
     }
 
     private Map<String, Object> uploadJson(String fileName, ICertStore certStore, String cloudPath) throws IOException {
@@ -306,6 +278,7 @@ public class CertificateGeneratorActor extends BaseActor {
         properties.put(JsonKey.SLUG, certVar.getSlug());
         properties.put(JsonKey.PREVIEW, certVar.getPreview(preview));
         properties.put(JsonKey.BASE_PATH, certVar.getBasePath());
+        properties.put(JsonKey.CLOUD_UPLOAD_RETRY_COUNT, certVar.getCLOUD_UPLOAD_RETRY_COUNT());
 
         logger.info(request.getRequestContext(), "getProperties:properties got from Constant File ".concat(Collections.singleton(properties.toString()) + ""));
         return properties;

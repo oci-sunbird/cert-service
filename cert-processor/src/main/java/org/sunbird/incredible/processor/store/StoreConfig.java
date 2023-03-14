@@ -14,50 +14,27 @@ public class StoreConfig {
 
     private String cloudRetryCount = "3";
 
-    private AzureStoreConfig azureStoreConfig;
+    private String containerName;
 
-    private AwsStoreConfig awsStoreConfig;
+    private String path;
 
-    private OciStoreConfig ociStoreConfig;
+    private String account;
 
-    private GcpStoreConfig gcpStoreConfig;
+    private String key;
+
 
     private StoreConfig() {
     }
 
     public StoreConfig(Map<String, Object> storeParams) {
         setType((String) storeParams.get(JsonKey.TYPE));
-        if (storeParams.containsKey(JsonKey.AZURE)) {
-            AzureStoreConfig azureStoreConfig = mapper.convertValue(storeParams.get(JsonKey.AZURE), AzureStoreConfig.class);
-            setAzureStoreConfig(azureStoreConfig);
-        } else if (storeParams.containsKey(JsonKey.AWS)) {
-            AwsStoreConfig awsStoreConfig = mapper.convertValue(storeParams.get(JsonKey.AWS), AwsStoreConfig.class);
-            setAwsStoreConfig(awsStoreConfig);
-        } else if (storeParams.containsKey(JsonKey.GCP)) {
-            GcpStoreConfig gcpStoreConfig = mapper.convertValue(storeParams.get(JsonKey.GCP), GcpStoreConfig.class);
-            setGcpStoreConfig(gcpStoreConfig);
-        } else if (storeParams.containsKey(JsonKey.OCI)) {
-            OciStoreConfig ociStoreConfig = mapper.convertValue(storeParams.get(JsonKey.OCI), OciStoreConfig.class);
-            setOciStoreConfig(ociStoreConfig);
-        }
+        setContainerName((String) storeParams.get(JsonKey.containerName));
+        setAccount((String) storeParams.get(JsonKey.ACCOUNT));
+        setKey((String) storeParams.get(JsonKey.KEY));
     }
 
     public boolean isCloudStore() {
-        return (azureStoreConfig != null || awsStoreConfig != null || gcpStoreConfig != null || ociStoreConfig != null);
-    }
-
-    public String getContainerName() {
-        String containerName = null;
-        if (JsonKey.AZURE.equals(getType())) {
-            containerName = azureStoreConfig.getContainerName();
-        } else if (JsonKey.AWS.equals(getType())) {
-            containerName = awsStoreConfig.getContainerName();
-        } else if (JsonKey.GCP.equals(getType())) {
-            containerName = gcpStoreConfig.getContainerName();
-        } else if (JsonKey.OCI.equals(getType())) {
-            containerName = ociStoreConfig.getContainerName();
-        }
-        return containerName;
+        return getType() != null;
     }
 
     public String getType() {
@@ -76,36 +53,38 @@ public class StoreConfig {
         this.cloudRetryCount = cloudRetryCount;
     }
 
-    public AzureStoreConfig getAzureStoreConfig() {
-        return azureStoreConfig;
+    public String getContainerName() {
+        return containerName;
     }
 
-    public void setAzureStoreConfig(AzureStoreConfig azureStoreConfig) {
-        this.azureStoreConfig = azureStoreConfig;
+    public void setContainerName(String containerName) {
+        this.containerName = containerName;
     }
 
-    public AwsStoreConfig getAwsStoreConfig() {
-        return awsStoreConfig;
+    public String getPath() {
+        return path;
     }
 
-    public void setAwsStoreConfig(AwsStoreConfig awsStoreConfig) {
-        this.awsStoreConfig = awsStoreConfig;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public OciStoreConfig getOciStoreConfig() {
-        return ociStoreConfig;
+    public String getAccount() {
+        return account;
     }
 
-    public void setOciStoreConfig(OciStoreConfig ociStoreConfig) {
-        this.ociStoreConfig = ociStoreConfig;
-    }
-    public GcpStoreConfig getGcpStoreConfig() {
-        return gcpStoreConfig;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public void setGcpStoreConfig(GcpStoreConfig gcpStoreConfig) {
-        this.gcpStoreConfig = gcpStoreConfig;
+    public String getKey() {
+        return key;
     }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
 
     @Override
     public String toString() {
