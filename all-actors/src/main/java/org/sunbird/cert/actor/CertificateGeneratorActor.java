@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.sunbird.incredible.CertificateGenerator;
 import org.sunbird.incredible.UrlManager;
 import org.sunbird.incredible.processor.CertModel;
@@ -33,6 +32,7 @@ import org.sunbird.response.CertificateResponse;
 import org.sunbird.response.CertificateResponseV1;
 import org.sunbird.response.Response;
 import scala.Some;
+import scala.Option;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,7 +104,24 @@ public class CertificateGeneratorActor extends BaseActor {
 
 
     private BaseStorageService getStorageService() {
-        StorageConfig storageConfig = new StorageConfig(certVar.getCloudStorageType(), certVar.getCloudStorageKey(), certVar.getCloudStorageSecret());
+        StorageConfig storageConfig;
+        String storageKey = certVar.getCloudStorageKey();;
+        String storageSecret = certVar.getCloudStorageSecret();
+        Option<String> storageEndpoint;
+        Option<String> storageRegion;
+        if (certVar.getCloudStorageType().equalsIgnoreCase("azure")) {
+            storageEndpoint = Option.apply("");
+            storageRegion = Option.apply("");
+        } else if (certVar.getCloudStorageType().equalsIgnoreCase("oci")){
+            storageEndpoint = Option.apply(certVar.getCloudStorageEndpoint());
+            storageRegion = Option.apply("");
+        } else {
+            storageKey = "";
+            storageSecret = "";
+            storageEndpoint = scala.Option.apply("");
+            storageRegion = scala.Option.apply("");
+        }
+        storageConfig = new StorageConfig(certVar.getCloudStorageType(), storageKey, storageSecret,storageEndpoint,storageRegion);
         logger.info(null, "CertificateGeneratorActor:getStorageService:storage object formed: {}" ,storageConfig.toString());
         return StorageServiceFactory.getStorageService(storageConfig);
     }

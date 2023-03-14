@@ -22,6 +22,8 @@ public class StoreConfig {
 
     private String key;
 
+    private String endpoint;
+
 
     private StoreConfig() {
     }
@@ -31,6 +33,7 @@ public class StoreConfig {
         setContainerName((String) storeParams.get(JsonKey.containerName));
         setAccount((String) storeParams.get(JsonKey.ACCOUNT));
         setKey((String) storeParams.get(JsonKey.KEY));
+        setEndpoint((String) storeParams.get(JsonKey.CLOUD_STORAGE_ENDPOINT));
     }
 
     public boolean isCloudStore() {
@@ -85,6 +88,13 @@ public class StoreConfig {
         this.key = key;
     }
 
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
 
     @Override
     public String toString() {
