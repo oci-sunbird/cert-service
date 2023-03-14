@@ -34,6 +34,7 @@ import org.sunbird.message.ResponseCode;
 import org.sunbird.request.Request;
 import org.sunbird.response.Response;
 import scala.concurrent.duration.Duration;
+import scala.Option;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -122,7 +123,7 @@ public class CertificateGeneratorActorTest {
         PowerMockito.when(azureStoreConfig.getKey()).thenReturn("Mockito.anyString()");
         StorageConfig storageConfig = PowerMockito.mock(StorageConfig.class);
         PowerMockito.when(storeParams.getType()).thenReturn("Mockito.anyString()");
-        PowerMockito.whenNew(StorageConfig.class).withArguments(Mockito.anyString(),Mockito.anyString(),Mockito.anyString()).thenReturn(storageConfig);
+        PowerMockito.whenNew(StorageConfig.class).withArguments(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(),Option.apply(Mockito.anyString()),Option.apply(Mockito.anyString())).thenReturn(storageConfig);
         BaseStorageService storageService = PowerMockito.mock(BaseStorageService.class);
         PowerMockito.mockStatic(StorageServiceFactory.class);
         PowerMockito.when(StorageServiceFactory.getStorageService(Mockito.any(StorageConfig.class))).thenReturn(storageService);
