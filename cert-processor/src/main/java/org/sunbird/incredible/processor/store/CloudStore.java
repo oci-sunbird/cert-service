@@ -58,20 +58,10 @@ public class CloudStore implements ICertStore {
             String storageSecret = storeConfig.getKey();
             Option<String> storageEndpoint;
             Option<String> storageRegion;
-
-            if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase(storeConfig.getType(), "azure")) {
-                storageEndpoint = Option.apply("");
-                storageRegion = Option.apply("");
-            } else if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase(storeConfig.getType(), "oci")){
-                storageEndpoint = Option.apply(storeConfig.getEndpoint());
-                storageRegion = Option.apply("");
-            } else {
-                storageEndpoint = scala.Option.apply("");
-                storageRegion = scala.Option.apply("");
-            }
-
+            storageEndpoint = Option.apply(storeConfig.getEndpoint());
+            storageRegion = Option.apply("");
             StorageConfig storageConfig = new StorageConfig(storeConfig.getType(), storageKey, storageSecret,storageEndpoint,storageRegion);
-            logger.info("StorageParams:init:all storage params initialized for azure block");
+            logger.info("StorageParams:init:all storage params initialized for cloud block");
             storageService = StorageServiceFactory.getStorageService(storageConfig);
             cloudStorage = new CloudStorage(storageService);
         } else {
