@@ -28,10 +28,6 @@ public interface JsonKey {
     String PRIVATE_CLOUD_STORAGE_KEY = "PRIVATE_CLOUD_STORAGE_KEY";
 
     String CLOUD_STORAGE_ENDPOINT = "CLOUD_STORAGE_ENDPOINT";
-    String AZURE="azure";
-    String AWS="aws";
-
-    String OCI="oci";
     String GCP="gcloud";
     String SLUG ="sunbird_cert_slug";
     String ACCESS_CODE_LENGTH = "ACCESS_CODE_LENGTH";
